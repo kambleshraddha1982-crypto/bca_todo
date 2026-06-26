@@ -1,61 +1,23 @@
-<<<<<<< HEAD
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>My Todo ✅</h1>
+  <h2>📝 My Daily To-Do</h2>
+  
+  <form method="POST" action="/add">
+    <input type="text" name="task" placeholder="Buy groceries..." required>
+    <button type="submit">+ Add Task</button>
+  </form>
 
-    <!-- Add Todo Form -->
-    <form action="/add" method="POST">
-        <input type="text" name="content" placeholder="Add new task..." required>
-        <button type="submit">Add</button>
-    </form>
+  <ul>
+    {% for todo in todos %}
+      <li>
+        {{ todo.task }}
+        <a href="/delete/{{ todo.id }}">Delete</a>
+      </li>
+    {% endfor %}
+  </ul>
 
-    <!-- Todo List -->
-    <ul>
-        {% for todo in todos %}
-            <li>
-                {% if todo.done %}
-                    <s>{{ todo.content }}</s>
-                {% else %}
-                    {{ todo.content }}
-                {% endif %}
-                
-                <a href="/done/{{ todo.id }}">Done</a>
-                <a href="/delete/{{ todo.id }}">Delete</a>
-            </li>
-        {% endfor %}
-    </ul>
-
-    {% if not todos %}
-        <p>No tasks yet. Add one above!</p>
-    {% endif %}
+  {% if not todos %}
+    <p>No tasks yet. Add one above!</p>
+  {% endif %}
 {% endblock %}
-=======
-<!DOCTYPE html>
-<html>
-<head>
-<title>My Daily To-Do</title>
-<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
-</head>
-<body>
-<div class="box">
-<h2>📝 My Daily To-Do</h2>
-<form method="POST" action="/add">
-<input name="task" placeholder="Buy gr..." required>
-<button class="add">+ Add Task</button>
-</form>
-<table>
-<tr><th>Done</th><th>Task</th><th>Action</th></tr>
-{% for t in tasks %}
-<tr class="{{'done' if t.done else ''}}">
-<td><a href="/done/{{loop.index0}}">✓</a></td>
-<td>{{t.task}}</td>
-<td><a class="del" href="/delete/{{loop.index0}}">Delete</a></td>
-</tr>
-{% endfor %}
-</table>
-<p>Total: {{total}} | Completed: {{done}} | Incomplete: {{total-done}}</p>
-</div>
-</body>
-</html>
->>>>>>> b2e43d329b942c276867e5b78e0f0eb906f2af84
