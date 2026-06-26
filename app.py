@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from flask import Flask, render_template, request, redirect
 import json, os
 
@@ -43,8 +42,8 @@ def delete(id):
     return redirect('/')
 
 if __name__ == '__main__':
-=======
-from flask import Flask, render_template, request, redirect
+
+    from flask import Flask, render_template, request, redirect
 import json, os
 
 app = Flask(__name__)
@@ -88,5 +87,4 @@ def delete(id):
     return redirect('/')
 
 if __name__ == '__main__':
->>>>>>> b2e43d329b942c276867e5b78e0f0eb906f2af84
     app.run(debug=True)
