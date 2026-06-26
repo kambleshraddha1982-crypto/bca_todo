@@ -20,7 +20,7 @@ def save_tasks(tasks):
 def home():
     tasks = load_tasks()
     done_count = sum(1 for t in tasks if t['done'])
-    return render_template('index.html', tasks=tasks, done=done_count, total=len(tasks))
+    return render_template('index.html', todos=tasks, done=done_count, total=len(tasks))
 
 @app.route('/add', methods=['POST'])
 def add():
