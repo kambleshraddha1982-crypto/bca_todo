@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 [{"task": "chocolates", "done": true}, {"task": "milk", "done": true}, {"task": "chips", "done": false}]
+=======
+[{"task": "Buy groceries", "done": true}, {"task": "Potato", "done": false}]
+>>>>>>> b2e43d329b942c276867e5b78e0f0eb906f2af84

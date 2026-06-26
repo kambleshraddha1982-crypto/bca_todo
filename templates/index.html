@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "base.html" %}
 
 {% block content %}
@@ -29,3 +30,32 @@
         <p>No tasks yet. Add one above!</p>
     {% endif %}
 {% endblock %}
+=======
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Daily To-Do</title>
+<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+</head>
+<body>
+<div class="box">
+<h2>📝 My Daily To-Do</h2>
+<form method="POST" action="/add">
+<input name="task" placeholder="Buy gr..." required>
+<button class="add">+ Add Task</button>
+</form>
+<table>
+<tr><th>Done</th><th>Task</th><th>Action</th></tr>
+{% for t in tasks %}
+<tr class="{{'done' if t.done else ''}}">
+<td><a href="/done/{{loop.index0}}">✓</a></td>
+<td>{{t.task}}</td>
+<td><a class="del" href="/delete/{{loop.index0}}">Delete</a></td>
+</tr>
+{% endfor %}
+</table>
+<p>Total: {{total}} | Completed: {{done}} | Incomplete: {{total-done}}</p>
+</div>
+</body>
+</html>
+>>>>>>> b2e43d329b942c276867e5b78e0f0eb906f2af84
