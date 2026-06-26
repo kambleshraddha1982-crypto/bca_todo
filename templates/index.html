@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>My Todo ✅</h1>
+
+    <!-- Add Todo Form -->
+    <form action="/add" method="POST">
+        <input type="text" name="content" placeholder="Add new task..." required>
+        <button type="submit">Add</button>
+    </form>
+
+    <!-- Todo List -->
+    <ul>
+        {% for todo in todos %}
+            <li>
+                {% if todo.done %}
+                    <s>{{ todo.content }}</s>
+                {% else %}
+                    {{ todo.content }}
+                {% endif %}
+                
+                <a href="/done/{{ todo.id }}">Done</a>
+                <a href="/delete/{{ todo.id }}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% if not todos %}
+        <p>No tasks yet. Add one above!</p>
+    {% endif %}
+{% endblock %}
