@@ -1,52 +1,41 @@
 from flask import Flask, render_template, request, redirect
-import json, os
+from flask_sqlalchemy import SQLAlchemy
+import os
 
 app = Flask(__name__)
-DATA_FILE = 'data.json'
+db_url = os.environ.get('DATABASE_URL')
+if db_url and db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql://", 1)
 
-def load_tasks():
-    if os.path.exists(DATA_FILE):
-        try:
-            with open(DATA_FILE, 'r') as f:
-                return json.load(f)
-        except json.JSONDecodeError:
-            return []
-    return []
+app.config['SQLALCHEMY_DATABASE_URI'] = db_url
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
-def save_tasks(tasks):
-    with open(DATA_FILE, 'w') as f:
-        json.dump(tasks, f)
+class Task(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    task = db.Column(db.String(200), nullable=False)
+    done = db.Column(db.Boolean, default=False)
+
+with app.app_context(): db.create_all()
 
 @app.route('/')
 def home():
-    tasks = load_tasks()
-    done_count = sum(1 for t in tasks if t['done'])
+    tasks = Task.query.all()
+    done_count = Task.query.filter_by(done=True).count()
     return render_template('index.html', todos=tasks, done=done_count, total=len(tasks))
 
 @app.route('/add', methods=['POST'])
 def add():
-    tasks = load_tasks()
-    task = request.form.get('task')
-    if task:
-        tasks.append({'task': task, 'done': False})
-        save_tasks(tasks)
-    return redirect('/')
-
-@app.route('/done/<int:id>')
-def done(id):
-    tasks = load_tasks()
-    if 0 <= id < len(tasks):
-        tasks[id]['done'] = not tasks[id]['done']
-        save_tasks(tasks)
+    task_text = request.form.get('task')
+    if task_text:
+        new_task = Task(task=task_text)
+        db.session.add(new_task)
+        db.session.commit()
     return redirect('/')
 
 @app.route('/delete/<int:id>')
 def delete(id):
-    tasks = load_tasks()
-    if 0 <= id < len(tasks):
-        tasks.pop(id)
-        save_tasks(tasks)
+    task = Task.query.get_or_404(id)
+    db.session.delete(task)
+    db.session.commit()
     return redirect('/')
-
-if __name__ == '__main__':
-    app.run(debug=True)
